@@ -192,6 +192,15 @@ a = 321
 # k2 = 22
 # print(f"{k1} * {k2} = {k1 * k2}")
 
+"""String 正则"""
+# import re
+
+# m = re.match(r"^[0-9a-zA-Z_]{6,20}$", "TestUser_12345")
+# if not m:
+#     print("不符合正则")
+# else:
+#     print("符合正则")
+
 """Array"""
 # list = [1, 3, 5, 7, 100]
 # 添加元素

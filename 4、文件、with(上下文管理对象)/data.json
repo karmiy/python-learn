@@ -1,0 +1,22 @@
+{
+    "name": "Karmiy",
+    "age": 18,
+    "friends": [
+        "f1",
+        "f2"
+    ],
+    "cars": [
+        {
+            "brand": "BYD",
+            "maxSpeed": 180
+        },
+        {
+            "brand": "Audi",
+            "maxSpeed": 280
+        },
+        {
+            "brand": "Benz",
+            "maxSpeed": 320
+        }
+    ]
+}
