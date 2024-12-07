@@ -191,3 +191,189 @@
 
 # dog = Dog("苏西")
 # dog.make_voice()
+
+"""装饰器"""
+
+# from functools import wraps
+# from time import time
+
+
+# def record_time(func):
+#     """自定义装饰函数的装饰器"""
+
+#     # args 是位置参数，如 add(1, 2, 3, 4) 里 (1,2,3,4) 元组
+#     # kwargs 是关键字参数 my_function(name="Alice", age=30)
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         start = time()
+#         result = func(*args, **kwargs)
+#         print(f"{func.__name__}: {time() - start}秒")
+#         return result
+
+#     return wrapper
+
+
+# class Person(object):
+#     @record_time
+#     def test(self):
+#         print("run test")
+
+
+# person = Person()
+# person.test()
+
+"""参数化的装饰器"""
+# 其实就是多包一层函数返回一个装饰器
+# from functools import wraps
+# from time import time
+
+
+# def record(output):
+#     def decorate(func):
+#         @wraps(func)
+#         def wrapper(*args, **kwargs):
+#             start = time()
+#             result = func(*args, **kwargs)
+#             output(func.__name__, time() - start)
+#             return result
+
+#         return wrapper
+
+#     return decorate
+
+
+# def print_output(func_name, duration):
+#     print(f"{func_name} executed in {duration:.4f} seconds")
+
+
+# # 使用参数化装饰器
+# @record(print_output)
+# def test():
+#     for _ in range(10):
+#         pass
+
+
+# test()
+
+"""定义类的方式定义装饰器"""
+# from functools import wraps
+# from time import time
+
+
+# class Record:
+
+#     def __init__(self, output):
+#         self.output = output
+
+#     def __call__(self, func):
+
+#         @wraps(func)
+#         def wrapper(*args, **kwargs):
+#             start = time()
+#             result = func(*args, **kwargs)
+#             self.output(func.__name__, time() - start)
+#             return result
+
+#         return wrapper
+
+
+# def output_function(name, duration):
+#     print(f"Function '{name}' executed in {duration:.4f} seconds")
+
+
+# @Record(output_function)
+# def test():
+#     for _ in range(10):
+#         pass
+
+
+# test()
+
+"""装饰器创建单例"""
+# 但这个单例有线程安全问题：
+#   线程共享 instances
+#   如下多个线程同时 create_person_instance
+#       是有可能线程 1 走到 if cls not in instances，但还没 instances[cls] = cls(*args, **kwargs) 创建，线程 2 又 if cls not in instances，判断就不对了
+
+# from functools import wraps
+# from threading import Thread, current_thread
+
+
+# def singleton(cls):
+#     instances = {}
+
+#     @wraps(cls)
+#     def wrapper(*args, **kwargs):
+#         if cls not in instances:
+#             instances[cls] = cls(*args, **kwargs)
+#         return instances[cls]
+
+#     return wrapper
+
+
+# @singleton
+# class Person(object):
+#     __id = 1
+
+#     def getId(self):
+#         self.__id += 1
+#         return self.__id
+
+
+# def create_person_instance():
+#     person = Person()
+#     print(f"Instance ID in thread {current_thread().name}: {person.getId()}")
+
+
+# threads = []
+# for i in range(5):
+#     thread = Thread(target=create_person_instance)
+#     threads.append(thread)
+#     thread.start()
+
+# for thread in threads:
+#     thread.join()
+
+"""装饰器创建单例（线程安全）"""
+# from functools import wraps
+# from threading import RLock
+# from threading import Thread, current_thread
+
+
+# def singleton(cls):
+#     instances = {}
+#     locker = RLock()
+
+#     @wraps(cls)
+#     def wrapper(*args, **kwargs):
+#         if cls not in instances:
+#             with locker:
+#                 if cls not in instances:
+#                     instances[cls] = cls(*args, **kwargs)
+#         return instances[cls]
+
+#     return wrapper
+
+
+# @singleton
+# class Person(object):
+#     __id = 1
+
+#     def getId(self):
+#         self.__id += 1
+#         return self.__id
+
+
+# def create_person_instance():
+#     person = Person()
+#     print(f"Instance ID in thread {current_thread().name}: {person.getId()}")
+
+
+# threads = []
+# for i in range(5):
+#     thread = Thread(target=create_person_instance)
+#     threads.append(thread)
+#     thread.start()
+
+# for thread in threads:
+#     thread.join()

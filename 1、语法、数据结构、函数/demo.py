@@ -117,6 +117,7 @@ a = 321
 
 # print(add(10, 12))
 # print(add(10))
+# print(add.__name__)  # 函数名
 
 
 # def subtract(a, b):
@@ -126,6 +127,25 @@ a = 321
 # print(subtract(12, 2))
 # # 可以参数不按顺序
 # print(subtract(b=2, a=12))
+
+"""lambda 匿名函数"""
+
+# heapq 模块主要用于高效地处理排序或获取极值的操作
+
+# import heapq
+
+# list1 = [34, 25, 12, 99, 87, 63, 58, 78, 88, 92]
+# list2 = [
+#     {"name": "IBM", "shares": 100, "price": 91.1},
+#     {"name": "AAPL", "shares": 50, "price": 543.22},
+#     {"name": "FB", "shares": 200, "price": 21.09},
+#     {"name": "HPQ", "shares": 35, "price": 31.75},
+#     {"name": "ACME", "shares": 75, "price": 115.65},
+# ]
+# # 找出最大的 3 个数
+# print(heapq.nlargest(3, list1))
+# # lambda 是匿名函数，这里等价与 (x) => x.price
+# print(heapq.nlargest(2, list2, key=lambda x: x["price"]))
 
 
 """module, __name__"""
@@ -141,9 +161,10 @@ a = 321
 
 # print(multiply(1, 2, 3, 4, 5))
 
-"""global var"""
+"""global, nonlocal var"""
+# python 中作用域里的变量是局部变量，不会像 JS 一样自动往上层找
 
-
+# global
 # def testGlobal():
 #     global g
 #     g = 100
@@ -151,6 +172,22 @@ a = 321
 
 # testGlobal()
 # print(g)
+
+
+# nonlocal
+# def outer():
+#     x = 10  # 外层函数的局部变量
+
+#     def inner():
+#         nonlocal x  # 声明使用外层作用域的 x
+#         x += 5  # 修改外层函数中的 x
+
+#     inner()
+#     print(x)  # 输出：15，因为 inner() 中的修改生效了
+
+
+# outer()
+
 
 """String"""
 # print(
@@ -229,6 +266,16 @@ a = 321
 # list.clear()
 # print(list)
 
+# 列表推导式
+# names = ["A1", "A2"]
+# courses = ["语文", "数学", "英语"]
+# scores = [[None] * len(courses) for _ in range(len(names))]
+# print(scores)  # [[None, None, None], [None, None, None]]
+# for row, name in enumerate(names):
+#     for col, course in enumerate(courses):
+#         scores[row][col] = float(input(f"请输入{name}的{course}成绩: "))
+# print(scores)
+
 """生成式和生成器"""
 # f = [x for x in range(1, 10)]
 # print(f)
@@ -280,3 +327,16 @@ a = 321
 # d.update(c=3)
 # d.pop("b")
 # print(d)
+
+# 推导式
+# d = {"a": 100, "b": 200, "c": 300}
+# d2 = {key: value for key, value in d.items() if value > 100}
+# print(d2)
+
+"""pass 占位语句"""
+# pass，表示“这里暂时没有实现内容，或者没有操作，但语法上需要一条语句”
+# 可以避免语法错误，方便之后添加实际代码
+
+
+# def my_function():
+#     pass  # 先占位，之后再实现功能
